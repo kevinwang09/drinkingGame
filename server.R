@@ -9,15 +9,20 @@ server <- function(input, output) {
   # 1. It is "reactive" and therefore should be automatically
   #    re-executed when inputs (input$bins) change
   # 2. Its output type is a plot
-  output$distPlot <- renderPlot({
+  output$plot1 = renderPlotly({
+    x = rnorm(input$numDataPoints, mean = 0, sd = 1)
+    sortX = sort(x)
+    range = ((1:length(sortX)) - 0.5) / length(sortX)
+    theoQuantile = qnorm(range)
+    df = data.frame(theoQuantile = theoQuantile, sortX = sortX) %>% 
+      dplyr::arrange(sortX)
     
-    x    <- faithful$waiting
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
     
-    hist(x, breaks = bins, col = "#75AADB", border = "white",
-         xlab = "Waiting time to next eruption (in mins)",
-         main = "Histogram of waiting times")
-    
+    p = plot_ly(df, x = ~theoQuantile, y = ~sortX, type = "scatter", mode = "markers") 
+    p
+    # plot(x)
+    # qqnorm(x)
+    # qqline(x)
   })
   
 }

@@ -1,10 +1,11 @@
 library(shiny)
-
+library(plotly)
+library(dplyr)
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
   
   # App title ----
-  titlePanel("Hello Shiny!"),
+  titlePanel("Kevin Wang's Drinking Game"),
   
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
@@ -13,11 +14,11 @@ ui <- fluidPage(
     sidebarPanel(
       
       # Input: Slider for the number of bins ----
-      sliderInput(inputId = "bins",
-                  label = "Number of bins:",
+      sliderInput(inputId = "numDataPoints",
+                  label = "Number of Data Points",
                   min = 1,
-                  max = 50,
-                  value = 30)
+                  max = 100,
+                  value = 20)
       
     ),
     
@@ -25,7 +26,7 @@ ui <- fluidPage(
     mainPanel(
       
       # Output: Histogram ----
-      plotOutput(outputId = "distPlot")
+      plotlyOutput(outputId = "plot1")
       
     )
   )
