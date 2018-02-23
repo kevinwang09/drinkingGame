@@ -9,7 +9,7 @@ ui <- fluidPage(
     
     # Sidebar panel for inputs ----
     sidebarPanel(
-      h3("Help"),
+      h3("Rules"),
       h5("This is a simple game. Pick the number of data points, and press the button."),
       p(),
       h5("A random data is generated. You must name the correct distribution to win."),
@@ -35,10 +35,10 @@ ui <- fluidPage(
       radioButtons("inputDist", 
                    label = h3("Available distributions"),
                    choices = list(
-                     "No Choice" = "No Choice",
-                     "Exponential" = "Exponential", 
+                     # "Exponential" = "Exponential", 
                      "Normal" = "Normal", 
-                     "Uniform" = "Uniform")),
+                     # "Uniform" = "Uniform",
+                     "t_100" = "t_100")),
       
       actionButton(inputId = "distributionButton",
                    label = "Distribution guessed", icon = icon("play-circle"),

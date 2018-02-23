@@ -22,23 +22,24 @@ server <- function(input, output, session) {
                           chosenData = NULL)
   
   observeEvent(input$computeButton,{
-    distributions = c("Exponential", "Uniform", "Normal")
+    distributions = c("Normal", "t_100")
     chosenDist = sample(distributions, 1)
     chosenData = dplyr::case_when(
-      chosenDist == "Exponential" ~ rexp(input$numDataPoints, rate = 1),
+      # chosenDist == "Exponential" ~ rexp(input$numDataPoints, rate = 1),
       chosenDist == "Normal" ~ rnorm(input$numDataPoints),
-      chosenDist == "Uniform" ~ runif(input$numDataPoints)
+      # chosenDist == "Uniform" ~ runif(input$numDataPoints),
+      chosenDist == "t_100" ~ rt(input$numDataPoints, df = 100)
     )
     
       result$chosenDist = chosenDist
       result$chosenData = chosenData
       
       removeUI(
-        selector = "div:has(> numDataPoints)"
+        selector = "#numDataPoints"
       )
       
       removeUI(
-        selector = "div:has(> computeButton)"
+        selector = "#computeButton"
       )
   })
   
@@ -72,8 +73,38 @@ server <- function(input, output, session) {
   # })
   
   
+  submittedAnswer = reactiveValues(submittedDist = NULL)
+  
+  observeEvent(input$distributionButton,{
+    submittedAnswer$submittedDist = input$inputDist
+    
+    removeUI(
+      selector = "#inputDist"
+    )
+    
+    removeUI(
+      selector = "#distributionButton"
+    )
+    
+    removeUI(
+      selector = "#qqPlotly"
+    )
+    
+    removeUI(
+      selector = "#summary"
+    )
+    
+    removeUI(
+      selector = "#densityPlotly"
+    )
+    
+  })
+  
   output$winning = renderPrint({
-    if(is.null(result$chosenData)){NULL} 
-    else {input$inputDist == result$chosenDist}
+    if(is.null(submittedAnswer$submittedDist)){NULL} 
+    else {
+      if(submittedAnswer$submittedDist == result$chosenDist) {return("You Won!")}
+        else{return(paste0("You lost! Drink ", input$numDataPoints, " shots!"))}
+    }
   })
 }
